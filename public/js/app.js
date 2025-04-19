@@ -70,8 +70,27 @@ const singup = () => {
     console.table(database);
 }
 
-
+//* login function
+const login = () => {
+    //! Email
+    let email = prompt('enter an email').trim().toLowerCase();
+    let exist = database.find(e => e.email === email)
+    if (!exist) {
+        alert("this email does not exist!")
+        return;
+    }
+    console.log(email);
+    //! password
+    let password = prompt("enter your password")
+    if (password !== exist.password) {
+        alert('That password didn’t match')
+    }else {
+        alert ('login successful.')
+    }
+}
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
 if (askuser == "sign up") {
     singup()
+}else if (askuser == "login") {
+    login()
 }
