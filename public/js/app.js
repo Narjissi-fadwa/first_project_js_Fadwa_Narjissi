@@ -71,26 +71,6 @@ const singup = () => {
     console.table(database);
 }
 
-//* login function
-const login = () => {
-    //! Email
-    let email = prompt('enter an email').trim().toLowerCase();
-    let existuser = database.find(e => e.email === email)
-    if (!existuser) {
-        alert("this email does not exist!")
-        return;
-    }
-    console.log(email);
-    //! password
-    let password = prompt("enter your password")
-    if (password !== existuser.password) {
-        alert('That password didn’t match')
-    }else {
-        alert ('login successful.')
-        alert(`Welcome, ${user.name}. Your current balance is ${user.balance.toFixed(2)} dh.`);
-        services(existuser)
-    }
-}
 //* changePassword function
 const changePassword = () => {
     let email = prompt("Enter your email to change your password")
@@ -110,18 +90,14 @@ const services = (existuser) => {
         let menu = prompt("choose an action from these options: (logout, withdraw money, deposit money, take a loan, invest , history)").toLowerCase();
         if (menu === 'logout') {
             alert("You are logged out.");
-            return;
+            break;
         } else if (menu === 'withdraw money') {
             withdraw(existuser);
         }else if (menu === 'deposit money'){
             deposit(existuser)
-        }
-        // else if (menu === 'take a loan') {
-            
-        // }else if (menu === 'invest') {
-            
-        // }
-        else if (menu === 'history'){
+        } else if (menu === 'take a loan') {
+            loan(existuser)
+        } else if (menu === 'history'){
             history(existuser)
         }
     }
@@ -148,19 +124,76 @@ const deposit = (existuser) => {
         return;
     }
     if (amount <= 1000 ) {
-        user.balance += amount;
+        existuser.balance += amount;
         existuser.history.push(`deposit of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
-        alert(`You have deposited ${amount.toFixed(2)} dh. New balance: ${user.balance.toFixed(2)} dh.`);
-        console.log(`Deposit of ${amount.toFixed(2)} dh. New balance: ${user.balance.toFixed(2)} dh.`);
+        alert(`You have deposited ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
+        console.log(`Deposit of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
     } else {
         alert("Amount exceeds the allowed limit of 1000 dh.");
-}
+    }
 }
 const history =(existuser) => {
-    if (user.history.length === 0) {
+    if (existuser.history.length === 0) {
         alert("0 transaction.");
     } else {
-        alert("Transaction history : " + user.history.join("\n"))
+        alert("Transaction history : " + existuser.history.join("\n"))
+    }
+}
+const loan = (existuser) => {
+    let maxLoan = (existuser.balance * 20) / 100 
+    let amountLoan = parseFloat(prompt("how much would like to take as a loan?"))
+    if (maxLoan >= amountLoan) {
+        existuser.balance += amountLoan
+        existuser.history.push(`Credit of ${amountLoan.toFixed(2)} dh.`)
+        alert(`You take a credit of ${amountLoan.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`)
+        console.log(`Credit of ${amountLoan.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`)
+    } else {
+        alert("Amount exceeds the allowed limit of loan.");
+    }
+    existuser.loan = {
+        total: amountLoan,
+        repaid: 0
+    };
+    
+    
+};
+
+//* login function
+const login = () => {
+    //! Email
+    let email = prompt('enter an email').trim().toLowerCase();
+    let existuser = database.find(e => e.email === email)
+    if (!existuser) {
+        alert("this email does not exist!")
+        return;
+    }
+    console.log(email);
+    //! password
+    let password = prompt("enter your password")
+    if (password !== existuser.password) {
+        alert('That password didn’t match')
+    }else {
+        alert ('login successful.')
+        alert(`Welcome, ${user.name}. Your current balance is ${user.balance.toFixed(2)} dh.`);
+        if (existuser.loan && existuser.loan.repaid < existuser.loan.total) {
+            let loandraft =(existuser.balance * 10) / 100 
+            if (existuser.loan.repaid + loandraft > existuser.loan.total) {
+                loandraft = existuser.loan.total - existuser.loan.repaid;
+            }
+            existuser.balance -= loandraft
+            existuser.loan.repaid += loandraft
+            existuser.history.push(`Repayment of ${loandraft.toFixed(2)} dh from loan.`);
+            alert(`Repayment of ${loandraft.toFixed(2)} dh from loan.`)
+            if (existuser.loan.repaid >= existuser.loan.total) {
+                alert("Loan fully repaid!");
+                existuser.loan.total = 0
+                existuser.loan.repaid =0
+                console.log(existuser.loan);
+                
+            }
+        }
+        services(existuser)
+        return true;
     }
 }
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
