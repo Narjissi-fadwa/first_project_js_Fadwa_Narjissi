@@ -9,7 +9,7 @@ class Users {
         this.history = []
     }
 }
-const user = new Users("full name", "email@gmail.com", "123456@" , 24);
+const user = new Users("fadwa narjissi", "fadwa@gmail.com", "123456@" , 24);
 database = [user]
 //* verificatin functions
 const verificationName = (name) => {
@@ -166,7 +166,6 @@ const invest = (existuser) => {
         alert("Enter a valid amount greater than 0.");
         return;
     }
-
     existuser.balance += amount 
     existuser.history.push(`Investment of ${amount.toFixed(2)} dh.`)
     alert(`You have invested ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
@@ -211,6 +210,7 @@ const login = () => {
         return true;
     }
 }
+
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
 while (askuser !== 'exit') {
     if (askuser == "sign up") {
