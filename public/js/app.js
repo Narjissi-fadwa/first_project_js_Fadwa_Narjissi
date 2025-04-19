@@ -87,7 +87,7 @@ const login = () => {
         alert('That password didn’t match')
     }else {
         alert ('login successful.')
-        alert(`Welcome, ${user.name}. Your current balance is ${user.balance.toFixed(2)} dirhams.`);
+        alert(`Welcome, ${user.name}. Your current balance is ${user.balance.toFixed(2)} dh.`);
         services(existuser)
     }
 }
@@ -107,14 +107,22 @@ const changePassword = () => {
 //* Services functions
 const services = (existuser) => {
     while (true) {
-        let menu = prompt("choose an action from these options: (logout, withdraw money, deposit money, take a loan, invest)").toLowerCase();
+        let menu = prompt("choose an action from these options: (logout, withdraw money, deposit money, take a loan, invest , history)").toLowerCase();
         if (menu === 'logout') {
             alert("You are logged out.");
             return;
         } else if (menu === 'withdraw money') {
             withdraw(existuser);
-        
+        }else if (menu === 'deposit money'){
+            deposit(existuser)
         }
+        // else if (menu === 'take a loan') {
+            
+        // }else if (menu === 'invest') {
+            
+        // }else if (menu === 'history'){
+
+        // }
     }
 };
 const withdraw = (existuser) => {
@@ -125,13 +133,27 @@ const withdraw = (existuser) => {
     }
     if (amount <= existuser.balance) {
         existuser.balance -= amount;
-        existuser.history.push(`Withdrawal of ${amount.toFixed(2)} dirhams. New balance: ${existuser.balance.toFixed(2)} dirhams.`);
-        alert(`Withdrawal of ${amount.toFixed(2)} dirhams. New balance: ${existuser.balance.toFixed(2)} dirhams.`);
-        console.log(`Withdrawal of ${amount.toFixed(2)} dirhams. New balance: ${existuser.balance.toFixed(2)} dirhams.`);
+        existuser.history.push(`Withdrawal of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
+        alert(`Withdrawal of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
+        console.log(`Withdrawal of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
     } else {
         alert("Insufficient balance.");
     }
 };
+const deposit = (existuser) => {
+    let amount = parseFloat(prompt("how much would you like to deposit?"))
+    if (isNaN(amount) || amount <= 0) {
+        alert("enter a valid amount greater than 0.")
+        return;
+    }
+    if (amount <= 1000 ) {
+        user.balance += amount;
+        alert(`You have deposited ${amount.toFixed(2)} dh. New balance: ${user.balance.toFixed(2)} dh.`);
+        console.log(`Deposit of ${amount.toFixed(2)} dh. New balance: ${user.balance.toFixed(2)} dh.`);
+    } else {
+        alert("Amount exceeds the allowed limit of 1000 dh.");
+}
+}
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
 if (askuser == "sign up") {
     singup()
