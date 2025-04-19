@@ -149,6 +149,7 @@ const deposit = (existuser) => {
     }
     if (amount <= 1000 ) {
         user.balance += amount;
+        existuser.history.push(`deposit of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
         alert(`You have deposited ${amount.toFixed(2)} dh. New balance: ${user.balance.toFixed(2)} dh.`);
         console.log(`Deposit of ${amount.toFixed(2)} dh. New balance: ${user.balance.toFixed(2)} dh.`);
     } else {
@@ -163,10 +164,16 @@ const history =(existuser) => {
     }
 }
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
-if (askuser == "sign up") {
-    singup()
-}else if (askuser == "login") {
-    login()
-}else if (askuser == "change password") {
-    changePassword()
+while (askuser !== 'exit') {
+    if (askuser == "sign up") {
+        singup()
+    } else if (askuser == "login") {
+        login()
+    } else if (askuser == "change password") {
+        changePassword()
+    } else {
+        alert("try again.")
+    }
+    askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase();
 }
+
