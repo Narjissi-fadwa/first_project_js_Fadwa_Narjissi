@@ -120,9 +120,10 @@ const services = (existuser) => {
             
         // }else if (menu === 'invest') {
             
-        // }else if (menu === 'history'){
-
         // }
+        else if (menu === 'history'){
+            history(existuser)
+        }
     }
 };
 const withdraw = (existuser) => {
@@ -153,6 +154,13 @@ const deposit = (existuser) => {
     } else {
         alert("Amount exceeds the allowed limit of 1000 dh.");
 }
+}
+const history =(existuser) => {
+    if (user.history.length === 0) {
+        alert("0 transaction.");
+    } else {
+        alert("Transaction history : " + user.history.join("\n"))
+    }
 }
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
 if (askuser == "sign up") {
