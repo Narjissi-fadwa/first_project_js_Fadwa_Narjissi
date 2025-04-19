@@ -88,9 +88,24 @@ const login = () => {
         alert ('login successful.')
     }
 }
+//* changePassword function
+const changePassword = () => {
+    let email = prompt("Enter your email to change your password")
+    if (database.find(e => e.email == email)){
+        let newPassword = prompt("enter your new password")
+        newPassword = verificationPassword(newPassword)
+        console.log(newPassword);
+    }else {
+        alert("this email does not exist!")
+        return;
+    }
+}
+
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
 if (askuser == "sign up") {
     singup()
 }else if (askuser == "login") {
     login()
+}else if (askuser == "change password") {
+    changePassword()
 }
