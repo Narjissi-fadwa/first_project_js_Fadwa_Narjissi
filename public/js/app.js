@@ -5,7 +5,8 @@ class Users {
         this.email = email
         this.password = password
         this.age = age
-        this.money = 1000
+        this.balance = 1000
+        this.history = []
     }
 }
 const user = new Users("full name", "email@gmail.com", "123456@" , 24);
@@ -74,18 +75,20 @@ const singup = () => {
 const login = () => {
     //! Email
     let email = prompt('enter an email').trim().toLowerCase();
-    let exist = database.find(e => e.email === email)
-    if (!exist) {
+    let existuser = database.find(e => e.email === email)
+    if (!existuser) {
         alert("this email does not exist!")
         return;
     }
     console.log(email);
     //! password
     let password = prompt("enter your password")
-    if (password !== exist.password) {
+    if (password !== existuser.password) {
         alert('That password didn’t match')
     }else {
         alert ('login successful.')
+        alert(`Welcome, ${user.name}. Your current balance is ${user.balance.toFixed(2)} dirhams.`);
+        services(existuser)
     }
 }
 //* changePassword function
@@ -101,6 +104,34 @@ const changePassword = () => {
     }
 }
 
+//* Services functions
+const services = (existuser) => {
+    while (true) {
+        let menu = prompt("choose an action from these options: (logout, withdraw money, deposit money, take a loan, invest)").toLowerCase();
+        if (menu === 'logout') {
+            alert("You are logged out.");
+            return;
+        } else if (menu === 'withdraw money') {
+            withdraw(existuser);
+        
+        }
+    }
+};
+const withdraw = (existuser) => {
+    let amount = parseFloat(prompt("Enter the amount to withdraw:"));
+    if (isNaN(amount) || amount <= 0) {
+        alert("enter a valid amount greater than 0.");
+        return;
+    }
+    if (amount <= existuser.balance) {
+        existuser.balance -= amount;
+        existuser.history.push(`Withdrawal of ${amount.toFixed(2)} dirhams. New balance: ${existuser.balance.toFixed(2)} dirhams.`);
+        alert(`Withdrawal of ${amount.toFixed(2)} dirhams. New balance: ${existuser.balance.toFixed(2)} dirhams.`);
+        console.log(`Withdrawal of ${amount.toFixed(2)} dirhams. New balance: ${existuser.balance.toFixed(2)} dirhams.`);
+    } else {
+        alert("Insufficient balance.");
+    }
+};
 let askuser = prompt("choose an action from these options: (sign up, login, change password)").toLowerCase()
 if (askuser == "sign up") {
     singup()
