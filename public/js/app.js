@@ -99,6 +99,8 @@ const services = (existuser) => {
             loan(existuser)
         } else if (menu === 'history'){
             history(existuser)
+        } else if (menu === 'invest'){
+            invest(existuser)
         }
     }
 };
@@ -156,7 +158,20 @@ const loan = (existuser) => {
     };
     
     
-};
+}
+const invest = (existuser) => {
+    let amount = parseFloat(prompt("Enter the amount to invest:"))
+
+    if (isNaN(amount) || amount <= 0) {
+        alert("Enter a valid amount greater than 0.");
+        return;
+    }
+
+    existuser.balance += amount 
+    existuser.history.push(`Investment of ${amount.toFixed(2)} dh.`)
+    alert(`You have invested ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
+    console.log(`Investment of ${amount.toFixed(2)} dh. New balance: ${existuser.balance.toFixed(2)} dh.`);
+}
 
 //* login function
 const login = () => {
